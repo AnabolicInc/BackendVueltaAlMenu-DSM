@@ -1,6 +1,7 @@
 const express = require('express'); // Importamos la librería express
 const cors = require('cors'); // Importamos la librería cors
 const looger = require('morgan'); // Importamos la librería morgan
+const db = require('../db/connection'); // Importamos la conexión a la base de datos
 
 class Server{
     
@@ -16,7 +17,8 @@ class Server{
         }
 
         //Connect to database
-        //this.dbConnection();
+        this.dbConnection();
+        console.log('DATABASE CONNECTED');
 
         //Middlewares
         this.middlewares();
@@ -27,7 +29,11 @@ class Server{
     }
 
     async dbConnection(){
-        //await dbConnection();
+        try {
+            await db.authenticate();
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     middlewares(){
