@@ -2,6 +2,8 @@ const express = require('express'); // Importamos la librería express
 const cors = require('cors'); // Importamos la librería cors
 const looger = require('morgan'); // Importamos la librería morgan
 const db = require('../db/connection'); // Importamos la conexión a la base de datos
+const Role = require('./role'); // Importamos el modelo Role
+const User = require('./user'); // Importamos el modelo User
 
 class Server{
     
@@ -13,7 +15,7 @@ class Server{
         //paths
         this.paths = {
             auth: '/api/auth',
-            users: '/api/users',
+            user: '/api/user',
         }
 
         //Connect to database
@@ -31,6 +33,8 @@ class Server{
     async dbConnection(){
         try {
             await db.authenticate();
+            await Role.sync({force: false});
+            await User.sync({force: false});
         } catch (error) {
             console.log(error);
         }
@@ -42,6 +46,8 @@ class Server{
 
         //Morgan
         this.app.use(looger('dev'));
+
+        this.app.use(express.json());
 
     }
 
