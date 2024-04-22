@@ -20,7 +20,7 @@ class Server{
 
         //Connect to database
         this.dbConnection();
-        console.log('DATABASE CONNECTED');
+
 
         //Middlewares
         this.middlewares();
@@ -35,19 +35,22 @@ class Server{
             await db.authenticate();
             await Role.sync({force: false});
             await User.sync({force: false});
+            console.log('DATABASE CONNECTED');
         } catch (error) {
             console.log(error);
         }
     }
 
     middlewares(){
-        //cors
-        this.app.use(cors()); 
+
 
         //Morgan
         this.app.use(looger('dev'));
 
         this.app.use(express.json());
+
+        //cors
+        this.app.use(cors()); 
 
     }
 
