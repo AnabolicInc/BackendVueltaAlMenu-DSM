@@ -18,6 +18,7 @@ module.exports = {
         phone: "986448520",
         image: "",
         password: bcryptjs.hashSync("diegoCE2024", salt),
+        role_id: 1,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
