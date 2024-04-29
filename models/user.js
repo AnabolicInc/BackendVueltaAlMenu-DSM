@@ -33,10 +33,11 @@ User.init({
     },
     password: {
         type: DataTypes.STRING
-    }
+    },
 }, {
     sequelize: db,
-    modelName: 'User'
+    modelName: 'User',
+
 });
 
 User.Role = User.belongsTo(require('./role'), {foreignKey: 'role_id'});
