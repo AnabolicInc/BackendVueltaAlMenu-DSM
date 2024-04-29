@@ -67,7 +67,10 @@ const register = async (req = request, res = response) => {
             lastName,
             email,
             password,
-            phone } = req.body;
+            phone,
+            createdAt,
+            updatedAt
+         } = req.body;
 
         // Get to client role
         const role = await Role.findOne({ where: { name: 'CLIENTE' } });
@@ -79,7 +82,10 @@ const register = async (req = request, res = response) => {
             email,
             password,
             phone,
-            role_id: role.id
+            role_id: role.id,
+            createdAt,
+            updatedAt
+
         }
 
         console.log(userData);
@@ -98,7 +104,7 @@ const register = async (req = request, res = response) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: 'Server error',
+            message: 'Server error ' + '[Error: ' + error +']'
         });
     }
 }
