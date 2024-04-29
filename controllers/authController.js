@@ -10,10 +10,6 @@ const Role = require("../models/role");
 const generateJWT = require("../helpers/generate-jwt");
 
 
-
-
-
-
 const login = async (req = request, res = response) => {
 
     try {
@@ -63,19 +59,18 @@ const login = async (req = request, res = response) => {
 
 const register = async (req = request, res = response) => {
     try {
+        console.log(req.body);
         const { name,
             lastName,
             email,
             password,
             phone,
-            createdAt,
-            updatedAt
-         } = req.body;
+        } = req.body;
 
-        // Get to client role
+        // Obtiene el rol de cliente 
         const role = await Role.findOne({ where: { name: 'CLIENTE' } });
 
-        // Create base user data
+        //Crea un objeto con los datos del usuario
         const userData = {
             name,
             lastName,
@@ -83,9 +78,6 @@ const register = async (req = request, res = response) => {
             password,
             phone,
             role_id: role.id,
-            createdAt,
-            updatedAt
-
         }
 
         console.log(userData);
@@ -104,7 +96,7 @@ const register = async (req = request, res = response) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: 'Server error ' + '[Error: ' + error +']'
+            message: error
         });
     }
 }
