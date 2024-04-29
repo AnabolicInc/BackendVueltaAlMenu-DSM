@@ -2,59 +2,54 @@
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) {
     return queryInterface.createTable('Users', {
       id: {
-        allowNulll: false,
+        allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER,
+        type: Sequelize.INTEGER
       },
       name: {
-        allowNull: false,
         type: Sequelize.STRING,
       },
       lastName: {
-        allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.STRING
       },
       email: {
-        allowNull: false,
-        unique: true,
         type: Sequelize.STRING,
+        unique: true
       },
       phone: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING
       },
       image: {
-        allowNull: true,
         type: Sequelize.STRING,
+        allowNull: true
       },
       password: {
-        allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.STRING
       },
       role_id: {
+        allowNull: false,
         type: Sequelize.INTEGER,
         references: {
           model: 'Roles',
-          key: 'id',
-        },
+          key: 'id'
+        }
       },
-      createdAt: {
-        allowNull: false,
+      createdAt:{
         type: Sequelize.DATE,
+        allowNull: true
       },
-      updatedAt: {
-        allowNull: false,
+      updatedAt:{
         type: Sequelize.DATE,
-      },
-      
+        allowNull: true
+      }
     });
-
   },
 
-  async down (queryInterface, Sequelize) {
+  async down(queryInterface, Sequelize) {
     /**
      * Add reverting commands here.
      *

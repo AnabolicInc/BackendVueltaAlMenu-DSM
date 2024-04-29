@@ -5,22 +5,20 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     return queryInterface.createTable('Roles', {
       id: {
-        allowNulll: false,
+        allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER,
+        type: Sequelize.INTEGER
       },
       name: {
         allowNull: false,
         unique: true,
-        type: Sequelize.STRING,
+        type: Sequelize.STRING
       }
-    });
-
+    })
   },
 
   async down (queryInterface, Sequelize) {
     return queryInterface.dropTable('Roles');
-
   }
 };

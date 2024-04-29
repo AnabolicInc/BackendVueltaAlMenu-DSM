@@ -2,6 +2,7 @@ const { Model, DataTypes } = require("sequelize");
 const db = require("../db/connection");
 
 
+
 class User extends Model {
     static id;
     static name;
@@ -40,14 +41,15 @@ User.init({
 
 User.Role = User.belongsTo(require('./role'), {foreignKey: 'role_id'});
 
-User.prototype.toJSON = function(){
+User.prototype.toJSON = function() {
     const user = this.get();
-    delete user.password; // delete this property password
-    
-    //incluide the role_id
+    delete user.password; // Delete this property password
+    // Include the role_id
     user.role_id = this.getDataValue('role_id');
 
-    return user; 
-}
+    return user;
+};
+
+
 
 module.exports = User;
