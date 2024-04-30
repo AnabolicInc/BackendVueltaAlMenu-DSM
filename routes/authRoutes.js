@@ -19,8 +19,8 @@ router.post('/login', [
 router.post('/register', [
     check('name', 'the field name is required').not().isEmpty(),
     check('lastName', 'the field lastName is required').not().isEmpty(),
+    check('phone', 'the field phone is required').not().isEmpty(),
     check('email', 'the field email is required').not().isEmpty(),
-    check('email', 'this not valid email').isEmail(),
     check('email', 'the field email is required').custom(verifyEmail),
     check('password', 'the field password is required').not().isEmpty(),
     validateFields

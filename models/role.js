@@ -14,7 +14,7 @@ Role.init({
         type: DataTypes.STRING,
         unique: true
     }
-}, {
+},{
     sequelize: db,
     modelName: 'Role'
 });

@@ -1,13 +1,9 @@
 const { response, request } = require("express");
-const bcryptjs = require("bcryptjs");
-
-const jwt = require("jsonwebtoken");
-
-
 const User = require("../models/user");
 const Role = require("../models/role");
-
+const bcryptjs = require("bcryptjs");
 const generateJWT = require("../helpers/generate-jwt");
+const jwt = require("jsonwebtoken");
 
 
 const login = async (req = request, res = response) => {
@@ -59,7 +55,7 @@ const login = async (req = request, res = response) => {
 
 const register = async (req = request, res = response) => {
     try {
-        console.log(req.body);
+
         const { name,
             lastName,
             email,
@@ -67,8 +63,11 @@ const register = async (req = request, res = response) => {
             phone,
         } = req.body;
 
+        console.log('JSON DATA USER: ', req.body)
+
         // Obtiene el rol de cliente 
         const role = await Role.findOne({ where: { name: 'CLIENTE' } });
+
 
         //Crea un objeto con los datos del usuario
         const userData = {
@@ -102,11 +101,12 @@ const register = async (req = request, res = response) => {
 }
 
 const validateToken = async (req = request, res = response) => {
+    
     const authHeader = req.headers['authorization'];
-
-    // Separate the token from the "Bearer" prefix
+   
     token = authHeader && authHeader.split(' ')[1];
-
+    
+    // Separate the token from the "Bearer" prefix
     if (!token) {
         return res.status(401).json({
             success: false,
