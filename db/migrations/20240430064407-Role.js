@@ -15,10 +15,17 @@ module.exports = {
         unique: true,
         type: Sequelize.STRING
       }
-    })
+    },
+    {
+      timestamps: false
+    }
+  )
   },
 
   async down (queryInterface, Sequelize) {
     return queryInterface.dropTable('Roles');
-  }
+  },
+
+
+
 };
