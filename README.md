@@ -11,8 +11,9 @@ Aquí se encuentran los comandos que se utilizarán en el backend:
 
 - `npm i mysql2 `: Instala las dependencias de mysql.
 - `npm install -g nodemon `: Instala globalmente nodemon.
-- `npm i sequelize `: Instala globalmente nodemon.
-- `npm i sequelize-cli `: Instala globalmente nodemon.
+- `npm i sequelize `: Instalar sequelize.
+- `npm i sequelize-cli `: Instala sequelize-cli.
+- `npm install cloudinary `: Instala cloudinary.
 
 En el caso de que el sistema no deje ejecutar scripts, se debe de abrir una powershell 
 con permisos de admin e ingresar los siguientes comandos:
@@ -30,7 +31,7 @@ con permisos de admin e ingresar los siguientes comandos:
 
 `sequelize db:migrate:undo`
 
-## evert All Migrations:
+## Revert All Migrations:
 
 `sequelize db:migrate:undo:all`
 
