@@ -49,6 +49,7 @@ module.exports = {
         allowNull: true
       }
     });
+
   },
 
   async down(queryInterface, Sequelize) {

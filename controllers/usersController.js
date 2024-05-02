@@ -8,7 +8,10 @@ const emailHelper = require('../helpers/send-email');
 
 const getUsers = async (req = request, res = response) => {
     try {
+        console.log(req.user);
+        
         const users = await User.findAll();
+        const data = "data";
         res.status(200).json({
             data: users,
         })
