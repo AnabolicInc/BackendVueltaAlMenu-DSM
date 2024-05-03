@@ -56,53 +56,6 @@ const login = async (req = request, res = response) => {
 }
 
 
-/*
-const login = async (req = request, res = response) => {
-
-    try {
-
-        const { email, password } = req.body;
-
-
-        const user = await User.findOne({ where: { email } });
-
-
-        // Verify password
-        const validPassword = bcryptjs.compareSync(password, user.password);
-
-        if (!validPassword) {
-            return res.status(400).json({
-                success: false,
-                error: true,
-                message: 'Invalidate credentials.',
-            });
-        }
-
-        // Generate JWT
-        const token = await generateJWT(user.id);
-
-        const userData = {
-            name: user.name,
-            lastName: user.lastName,
-            email: user.email,
-            phone: user.phone,
-            role_id: user.role_id,
-            session_token: token
-        }
-
-        res.status(200).json({
-            success: true,
-            data: userData
-        });
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({
-            success: false,
-            message: 'Server error'
-        });
-    }
-}
-*/
 const register = async (req = request, res = response) => {
     try {
 

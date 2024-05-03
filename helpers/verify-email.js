@@ -14,7 +14,7 @@ const verifyEmailLogin =  async (email) => {
 
 
 
-const verifyEmail = async (email) => {
+const verifyEmailRegister = async (email) => {
     const existEmail = await User.findOne({ where: { email } });
 
     if (existEmail) {
@@ -24,6 +24,6 @@ const verifyEmail = async (email) => {
 
 
 module.exports = {
-    verifyEmail,
+    verifyEmail: verifyEmailRegister,
     verifyEmailLogin
 };
