@@ -1,8 +1,9 @@
 const { Router, request, response } = require("express");
-const { register, login, validateToken } = require("../controllers/authController");
+const { login, validateToken } = require("../controllers/authController");
 const { check } = require("express-validator");
 const { validateFields } = require("../middlewares/validate-fields");
-const { verifyEmailLogin, verifyEmail } = require("../helpers/verify-email");
+const { verifyEmailLogin,verifyEmail } = require("../helpers/verify-email");
+const { register } = require("../controllers/authController");
 
 
 const router = Router();
@@ -16,6 +17,17 @@ router.post('/login', [
     validateFields
 ], login);
 
+router.post('/register', [
+    
+    check('name', 'The name field is required').not().isEmpty(),
+    check('lastName', 'The lastName field is required').not().isEmpty(),
+    check('phone', 'The phone field is required').not().isEmpty(),
+    check('email', 'The email field is required').not().isEmpty(),
+    check('email', 'This is not a valid email').isEmail(),
+    check('email', 'El correo electrónico ya existe en el sistema').custom(verifyEmail),
+    check('password', 'The password field is required').not().isEmpty(),
+    validateFields
+], register);
 
 
 router.get('/validate-token', validateToken);
