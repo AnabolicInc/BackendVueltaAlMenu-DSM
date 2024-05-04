@@ -1,10 +1,23 @@
 const {response, request} = require('express');
+require('dotenv').config();
 const cloudinary = require('cloudinary').v2;
 const User = require('../models/user');
 
+cloudinary.config({ 
+    cloud_name: process.env.CLOUD_NAME, 
+    api_key: process.env.API_KEY, 
+    api_secret: process.env.API_SECRET
+});
+
 const  updateImageCloudinary = async (req = request, res = response) => {
+
+
     try {
+
+        
         const { collection, id } = req.params;
+        console.log({collection, id});
+        
         let model;
 
         switch (collection) {
@@ -39,7 +52,7 @@ const  updateImageCloudinary = async (req = request, res = response) => {
 
 
         const {tempFilePath} =req.files.archive;
-        const { secure_url } = await cloudinary.uploader(tempFilePath, {
+        const { secure_url } = await cloudinary.uploader.upload(tempFilePath, {
             folder: `StorageImagesAppDelivery/${collection}`
         });
 
@@ -56,6 +69,11 @@ const  updateImageCloudinary = async (req = request, res = response) => {
         });
 
     } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error'
+        });
 
     }
 }

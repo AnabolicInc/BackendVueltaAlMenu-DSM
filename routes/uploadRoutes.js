@@ -10,7 +10,7 @@ const router = Router();
 
 //actualizar la imagen
 
-router.put('/:colletion/:id',[
+router.put('/:collection/:id',[
     validateFields,
     validateArchiveUpload
 
