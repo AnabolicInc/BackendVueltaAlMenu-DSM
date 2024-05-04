@@ -3,12 +3,11 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    return queryInterface.bulkInsert('Categories', [
+    return queryInterface.bulkInsert('Products', [
       {
-        name: 'Hamburguesas',
-        description: 'Hamburguesas de todo tipo',
-        image: '',
-        status: true,
+        name: 'Hamburguesa de pollo',
+        price: 10000,
+        category_id: 1,
       },
     ], {});
   },
