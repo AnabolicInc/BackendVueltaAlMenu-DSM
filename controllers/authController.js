@@ -56,64 +56,16 @@ const login = async (req = request, res = response) => {
 }
 
 
-/*
-const login = async (req = request, res = response) => {
-
-    try {
-
-        const { email, password } = req.body;
-
-
-        const user = await User.findOne({ where: { email } });
-
-
-        // Verify password
-        const validPassword = bcryptjs.compareSync(password, user.password);
-
-        if (!validPassword) {
-            return res.status(400).json({
-                success: false,
-                error: true,
-                message: 'Invalidate credentials.',
-            });
-        }
-
-        // Generate JWT
-        const token = await generateJWT(user.id);
-
-        const userData = {
-            name: user.name,
-            lastName: user.lastName,
-            email: user.email,
-            phone: user.phone,
-            role_id: user.role_id,
-            session_token: token
-        }
-
-        res.status(200).json({
-            success: true,
-            data: userData
-        });
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({
-            success: false,
-            message: 'Server error'
-        });
-    }
-}
-*/
 const register = async (req = request, res = response) => {
     try {
 
-        const { name,
-            lastName,
-            email,
-            password,
-            phone,
-        } = req.body;
+        const { name:  nameReq,
+            lastName: lastNameReq,
+            email: emailReq,
+            password: passwordReq,
+            phone: phoneReq } = req.body;
 
-        console.log('JSON DATA USER: ', req.body)
+        console.log('DATA FROM USER: ', req.body)
 
         // Obtiene el rol de cliente 
         const role = await Role.findOne({ where: { name: 'CLIENTE' } });
@@ -121,11 +73,11 @@ const register = async (req = request, res = response) => {
 
         //Crea un objeto con los datos del usuario
         const userData = {
-            name,
-            lastName,
-            email,
-            password,
-            phone,
+            name:  nameReq,
+            lastName: lastNameReq,
+            email: emailReq,
+            password: passwordReq,
+            phone: phoneReq,
             role_id: role.id,
         }
 
@@ -136,16 +88,25 @@ const register = async (req = request, res = response) => {
         user.password = bcryptjs.hashSync(user.password, salt);
         await user.save();
 
-        res.status(200).json({
+        const token = await generateJWT(user.id);
+        
+
+        const { id, name,lastName,email,role_id } = user;
+
+        const dataUser = { id, name, lastName, email, role_id, session_token: token };
+
+        console.log('DATA USER: ', dataUser);
+        res.status(201).json({
             success: true,
-            data: user,
-            message: 'User created'
+            data: dataUser,
+            message: 'USER CREATED'
         });
 
     } catch (error) {
+        console.log(error);
         res.status(500).json({
             success: false,
-            message: error
+            message:  'USER NOT CREATED'
         });
     }
 }
