@@ -44,7 +44,6 @@ const  updateImageCloudinary = async (req = request, res = response) => {
             const nameImage = nameImageArray[nameImageArray.length - 1];
             const [ public_id ] = nameImage.split('.');
             cloudinary.uploader.destroy(`StorageImagesAppDelivery/${collection}/${public_id}`);
-            
         }
 
 

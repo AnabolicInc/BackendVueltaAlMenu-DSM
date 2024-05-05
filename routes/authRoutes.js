@@ -1,9 +1,10 @@
-const { Router, request, response } = require("express");
-const { login, validateToken } = require("../controllers/authController");
 const { check } = require("express-validator");
+const { Router, request, response } = require("express");
 const { validateFields } = require("../middlewares/validate-fields");
 const { verifyEmailLogin,verifyEmail } = require("../helpers/verify-email");
+const { login, validateToken, updateDataUser } = require("../controllers/authController");
 const { register } = require("../controllers/authController");
+
 
 
 const router = Router();
@@ -12,6 +13,7 @@ const router = Router();
 router.post('/login', [
     check('email', 'the field email is required').not().isEmpty(),
     check('email', 'this not valid email').isEmail(),
+    check('email', 'El correo no existe en el sistema').exists(),
     check('email', 'the field email is required').custom(verifyEmailLogin),
     check('password', 'the field password is required').not().isEmpty(),
     validateFields
@@ -31,7 +33,5 @@ router.post('/register', [
 
 
 router.get('/validate-token', validateToken);
-
-
 
 module.exports = router;
