@@ -34,6 +34,7 @@ const login = async (req = request, res = response) => {
             name: user.name,
             lastName: user.lastName,
             email: user.email,
+            image: user.image,
             phone: user.phone,
             role_id: user.role_id,
             session_token: token

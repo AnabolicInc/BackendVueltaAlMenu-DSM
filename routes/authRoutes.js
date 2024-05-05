@@ -1,9 +1,10 @@
-const { Router, request, response } = require("express");
-const { login, validateToken } = require("../controllers/authController");
 const { check } = require("express-validator");
+const { Router, request, response } = require("express");
 const { validateFields } = require("../middlewares/validate-fields");
 const { verifyEmailLogin,verifyEmail } = require("../helpers/verify-email");
+const { login, validateToken, updateDataUser } = require("../controllers/authController");
 const { register } = require("../controllers/authController");
+
 
 
 const router = Router();
@@ -31,7 +32,5 @@ router.post('/register', [
 
 
 router.get('/validate-token', validateToken);
-
-
 
 module.exports = router;
