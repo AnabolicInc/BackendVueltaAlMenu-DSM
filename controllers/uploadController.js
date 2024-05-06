@@ -2,6 +2,7 @@ const {response, request} = require('express');
 require('dotenv').config();
 const cloudinary = require('cloudinary').v2;
 const User = require('../models/user');
+const Category = require('../models/category');
 
 cloudinary.config({ 
     cloud_name: process.env.CLOUD_NAME, 
@@ -56,7 +57,7 @@ const  updateImageCloudinary = async (req = request, res = response) => {
         }
 
 
-        const {tempFilePath} =req.files;
+        const {tempFilePath} = req.files.archive;
         const { secure_url } = await cloudinary.uploader.upload(tempFilePath, {
             folder: `StorageImagesAppDelivery/${collection}`
         });
