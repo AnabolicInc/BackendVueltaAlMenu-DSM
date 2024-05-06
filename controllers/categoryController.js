@@ -1,5 +1,6 @@
 const { response, request } = require("express");
 const Category = require("../models/category");
+const { check } = require("express-validator");
 const bcryptjs = require("bcryptjs");
 const generateJWT = require("../helpers/generate-jwt");
 const jwt = require("jsonwebtoken");

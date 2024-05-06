@@ -1,7 +1,7 @@
 const { Router, request, response } = require("express");
 const { check } = require("express-validator");
 const { validateFields } = require("../middlewares/validate-fields");
-const { createCategory, updateCategory } = require("../controllers/categoryController");
+const { createCategory, updateCategory, getCategories, deleteCategory } = require("../controllers/categoryController");
 const { route } = require("./authRoutes");
 
 
@@ -22,8 +22,8 @@ router.post('/updateCategory',[
     validateFields
 ], updateCategory);
 
-router.get('/getCategories'[
-    validateFields
+router.get('/getCategories', [
+    
 ], getCategories);
 
 router.delete('/deleteCategory/:id',[
