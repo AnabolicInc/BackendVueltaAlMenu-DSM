@@ -1,8 +1,7 @@
-const { Router, request, response } = require("express");
 const { check } = require("express-validator");
+const { Router, request, response } = require("express");
 const { validateFields } = require("../middlewares/validate-fields");
-const { createCategory, updateCategory, getCategories, deleteCategory } = require("../controllers/categoryController");
-const { route } = require("./authRoutes");
+const { createCategory, updateCategory, listCategories, deleteCategory } = require("../controllers/categoryController");
 
 
 const router = Router(); 
@@ -10,7 +9,8 @@ const router = Router();
 router.post('/createCategory',[
     check('name', 'the field name is required').not().isEmpty(),
     check('name', 'the field name is required').isString(),
-
+    check('description', 'the field description is required').not().isEmpty(),
+    check('description', 'the field description is required').isString(),
     validateFields
 ], createCategory);
 
@@ -22,9 +22,9 @@ router.post('/updateCategory',[
     validateFields
 ], updateCategory);
 
-router.get('/getCategories', [
+router.get('/listCategories', [
     
-], getCategories);
+], listCategories);
 
 router.delete('/deleteCategory/:id',[
     validateFields
