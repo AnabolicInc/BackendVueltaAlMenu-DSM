@@ -5,7 +5,7 @@ const bcryptjs = require("bcryptjs");
 const generateJWT = require("../helpers/generate-jwt");
 const jwt = require("jsonwebtoken");
 
-const getCategories = async (req = request, res = response) => {
+const listCategories = async (req = request, res = response) => {
     try {
         const categories = await Category.findAll();
 
@@ -25,12 +25,11 @@ const getCategories = async (req = request, res = response) => {
 
 const createCategory = async (req = request, res = response) => {
     try {
-        const { name: nameReq,
-            description: descriptionReq,
-            image: imageReq,
+        const { name,
+            description
         } = req.body;
 
-        const category = await Category.create({ nameReq , descriptionReq, imageReq });
+        const category = await Category.create({ name , description, status: 1 });
 
         res.status(201).json({
             success: true,
@@ -109,7 +108,7 @@ const deleteCategory = async (req = request, res = response) => {
 
 
 module.exports = {
-    getCategories,
+    listCategories,
     createCategory,
     updateCategory,
     deleteCategory
