@@ -1,61 +1,83 @@
-const express = require('express'); // Importamos la librería express
-const cors = require('cors'); // Importamos la librería cors
-const looger = require('morgan'); // Importamos la librería morgan
-const db = require('../db/connection'); // Importamos la conexión a la base de datos
+const express = require('express');
+const cors = require('cors');
+const logger = require('morgan');
 
-class Server{
-    
-    constructor(){
-        this.app = express(); // Creando la aplicación express
-        this.port = process.env.PORT; // Puerto que se asigna en el archivo .env
-        this.server = require('http').createServer(this.app); // Creando el servidor
-        
-        //paths
+const db = require('../db/connection');
+const Role = require('./role');
+const User = require('./user');
+const fileUpload = require('express-fileupload');
+
+class Server {
+    constructor() {
+        this.app = express();
+        this.port = process.env.PORT;
+        this.server = require('http').createServer(this.app);
+
+        // Paths
         this.paths = {
             auth: '/api/auth',
-            users: '/api/users',
+            user: '/api/user',
+            upload: '/api/upload',
+            category: '/api/category',
+            product: '/api/product'
+
         }
 
-        //Connect to database
+        // Connect to database
         this.dbConnection();
-        console.log('DATABASE CONNECTED');
 
-        //Middlewares
+        // Middlewares
         this.middlewares();
 
-        //Routes Applications 
+        // Routes Application
         this.routes();
-
     }
 
-    async dbConnection(){
+    async dbConnection() {
         try {
             await db.authenticate();
+            await Role.sync({ force: false });
+            await User.sync({ force: false });
+            console.log('DATABASE CONNECTED');
         } catch (error) {
             console.log(error);
         }
     }
 
-    middlewares(){
-        //cors
-        this.app.use(cors()); 
+    middlewares() {
 
-        //Morgan
-        this.app.use(looger('dev'));
+        // Morgan
+        this.app.use(logger('dev'));
 
+        // Read and parse body
+        this.app.use(express.json());
+
+        // Cors
+        this.app.use(cors());
+
+        // Fileupload - load archives
+        this.app.use(fileUpload({
+            useTempFiles: true,
+            tempFileDir: '/tmp/',
+            createParentPath: true
+        }));
+
+        
     }
 
-    routes(){
+    routes() {
         this.app.use(this.paths.auth, require('../routes/authRoutes'));
-
+        this.app.use(this.paths.user, require('../routes/userRoutes'));
+        this.app.use(this.paths.upload, require('../routes/uploadRoutes'));
+        this.app.use(this.paths.category, require('../routes/categoryRoutes'));
+        //this.app.use(this.paths.product, require('../routes/productRoutes')); 
     }
 
-    listen(){
+    listen() {
         this.server.listen(this.port, () => {
-            console.log(`Servidor corriendo en el puerto ${this.port}`);
+            console.log('Server Running, Port:', this.port);
         });
     }
 }
 
-module.exports = Server; 
-
+module.exports = Server;
