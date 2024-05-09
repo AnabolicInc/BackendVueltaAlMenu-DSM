@@ -11,6 +11,7 @@ const login = async (req = request, res = response) => {
     try {
 
         const { email, password } = req.body;
+        
 
         const user = await User.findOne({ where: { email } });
         
@@ -23,7 +24,7 @@ const login = async (req = request, res = response) => {
             return res.status(400).json({
                 success: false,
                 error: true,
-                message: 'Invalidate credentials.'
+                message: 'Credenciales no válidas. Revise sus datos e intente nuevamente.' 
             });
         }
 
@@ -31,9 +32,11 @@ const login = async (req = request, res = response) => {
         const token = await generateJWT(user.id);
 
         const userData = {
+            id: user.id,
             name: user.name,
             lastName: user.lastName,
             email: user.email,
+            image: user.image,
             phone: user.phone,
             role_id: user.role_id,
             session_token: token

@@ -2,6 +2,7 @@ const {response, request} = require('express');
 require('dotenv').config();
 const cloudinary = require('cloudinary').v2;
 const User = require('../models/user');
+const Category = require('../models/category');
 
 cloudinary.config({ 
     cloud_name: process.env.CLOUD_NAME, 
@@ -31,12 +32,21 @@ const  updateImageCloudinary = async (req = request, res = response) => {
                     });
                 }
                 break;
+            case 'categories':
+                model = await Category.findByPk(id);
+                if(!model){
+                     return res.status(400).json({
+                         success: false,
+                         message: `Category not exist, ID: ${id}`
+                     });
+                }
+                break;
             default:
                 return res.status(400).json({
                     success: false,
                     message: 'The option is not valid'
                 });
-
+                break;
         }
 
         if(model.image){
@@ -44,14 +54,10 @@ const  updateImageCloudinary = async (req = request, res = response) => {
             const nameImage = nameImageArray[nameImageArray.length - 1];
             const [ public_id ] = nameImage.split('.');
             cloudinary.uploader.destroy(`StorageImagesAppDelivery/${collection}/${public_id}`);
-            return res.status(200).json({
-                success: true,
-                message: 'Image deleted'
-            });
         }
 
 
-        const {tempFilePath} =req.files.archive;
+        const {tempFilePath} = req.files.archive;
         const { secure_url } = await cloudinary.uploader.upload(tempFilePath, {
             folder: `StorageImagesAppDelivery/${collection}`
         });

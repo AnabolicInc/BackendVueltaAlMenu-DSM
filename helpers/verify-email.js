@@ -7,7 +7,7 @@ const verifyEmailLogin =  async (email) => {
     const existEmail = await User.findOne({ where: { email } });
 
     if (!existEmail) {
-        throw new Error('Invalid credentials.');
+        throw new Error('El correo electrónico ingresado no existe.');
     }
 }
   
