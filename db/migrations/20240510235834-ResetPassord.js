@@ -3,40 +3,21 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
 	async up(queryInterface, Sequelize) {
-		return queryInterface.createTable('Users', {
+		return queryInterface.createTable('ResetPasswords', {
 			id: {
 				allowNull: false,
 				autoIncrement: true,
 				primaryKey: true,
 				type: Sequelize.INTEGER
 			},
-			name: {
-				type: Sequelize.STRING,
-			},
-			lastName: {
-				type: Sequelize.STRING
-			},
 			email: {
 				type: Sequelize.STRING,
-				unique: true
 			},
-			phone: {
-				type: Sequelize.STRING
-			},
-			image: {
+			token: {
 				type: Sequelize.STRING,
-				allowNull: true
 			},
-			password: {
-				type: Sequelize.STRING
-			},
-			role_id: {
-				allowNull: false,
-				type: Sequelize.INTEGER,
-				references: {
-					model: 'Roles',
-					key: 'id'
-				}
+			status: {
+				type: Sequelize.BOOLEAN,
 			},
 			createdAt: {
 				type: Sequelize.DATE,
@@ -54,12 +35,7 @@ module.exports = {
 
 	async down(queryInterface, Sequelize) {
 
+		await queryInterface.dropTable('ResetPasswords');
 
-		/**
-		 * Add reverting commands here.
-		*
-		* Example:
-		  await queryInterface.dropTable('users');
-		 */
 	}
 };

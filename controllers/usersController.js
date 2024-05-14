@@ -29,7 +29,7 @@ const changePassword = async (req = request, res = response) => {
     console.log('email', email);
     
 
-    console.log(email);
+    //console.log(email);
     const user = await User.findOne({ where: { email } });
     
     
