@@ -31,12 +31,7 @@ router.post('/register', [
     validateFields
 ], register);
 
-router.post('/reset-password', [
-    check('email', 'the field email is required').not().isEmpty(),
-    check('email', 'this not valid email').isEmail(),
-    check('email', 'the field email is required').custom(verifyEmail),
-    validateFields
-], resetPassword);
+
 
 
 router.get('/validate-token', validateToken);

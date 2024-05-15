@@ -52,7 +52,10 @@ const changePassword = async (req = request, res = response) => {
         `<b>${verificationCode}</b>`
     );
 
-    res.status(200).send('Email Send');
+    res.status(200).json({
+        success: true,
+        message: 'Email sent'
+    });
 
 }
 

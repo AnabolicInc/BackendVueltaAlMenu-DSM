@@ -168,17 +168,7 @@ const validateToken = async (req = request, res = response) => {
     }
 }
 
-const resetPassword = async (req = request, res = response) => {
-    try {
-        const { email } = req.body;
 
-        // 1. Verificar si el email existe, si no existe devolver 400
-        // 2. Si existe, podemos enviar un email (nodemailer) con un token para resetear la contraseña. Token puede ser enviado como query param en el link del email
-        // 3. En el mail, enviar un link a la ruta para resetear la contraseña
-        // 4. Al momento de apretar el boton enviar, mandar token y nueva contraseña
-        // 5. Verificar si el token es válido y si el email es válido
-        // 6. Cambiar la contraseña en la base de datos
-};
 
 
 
