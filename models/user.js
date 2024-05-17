@@ -34,6 +34,10 @@ User.init({
     password: {
         type: DataTypes.STRING
     },
+    verification_code: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
 }, {
     sequelize: db,
     modelName: 'User',
