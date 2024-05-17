@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const { check } = require("express-validator");
-const { getUsers, changePassword, putUser } = require("../controllers/usersController");
+const { getUsers, changePassword, putUser, verifyCode } = require("../controllers/usersController");
 const { validateJWT } = require("../middlewares/validate-jwt");
 const { validateFields } = require("../middlewares/validate-fields");
 const { verifyEmailLogin } = require("../helpers/verify-email");
@@ -27,6 +27,14 @@ router.post('/change-password',[
     check('email', 'the field email is required').custom(verifyEmailLogin),
     validateFields
 ], changePassword);
+
+router.post('/verifyCode',[
+    check('email', 'the field email is required').not().isEmpty(),
+    check('code', 'the field code is required').not().isEmpty(),
+    check('email', 'this not valid email').isEmail(),
+    validateFields
+], verifyCode);
+
 
 
 module.exports = router;

@@ -2,53 +2,59 @@
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-	async up(queryInterface, Sequelize) {
-		return queryInterface.createTable('Users', {
-			id: {
-				allowNull: false,
-				autoIncrement: true,
-				primaryKey: true,
-				type: Sequelize.INTEGER
-			},
-			name: {
-				type: Sequelize.STRING,
-			},
-			lastName: {
-				type: Sequelize.STRING
-			},
-			email: {
-				type: Sequelize.STRING,
-				unique: true
-			},
-			phone: {
-				type: Sequelize.STRING
-			},
-			image: {
-				type: Sequelize.STRING,
-				allowNull: true
-			},
-			password: {
-				type: Sequelize.STRING
-			},
-			role_id: {
-				allowNull: false,
-				type: Sequelize.INTEGER,
-				references: {
-					model: 'Roles',
-					key: 'id'
-				}
-			},
-			createdAt: {
-				type: Sequelize.DATE,
-				defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-				allowNull: true
-			},
-			updatedAt: {
-				type: Sequelize.DATE,
-				defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-				allowNull: true
-			}
-		});
+
+  async up(queryInterface, Sequelize) {
+    return queryInterface.createTable('Users', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER
+      },
+      name: {
+        type: Sequelize.STRING,
+      },
+      lastName: {
+        type: Sequelize.STRING
+      },
+      email: {
+        type: Sequelize.STRING,
+        unique: true
+      },
+      phone: {
+        type: Sequelize.STRING
+      },
+      image: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      password: {
+        type: Sequelize.STRING
+      },
+      verification_code: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      role_id: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Roles',
+          key: 'id'
+        }
+      },
+      createdAt:{
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        allowNull: true
+      },
+      updatedAt:{
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        allowNull: true
+      }
+    });
+
 
 	},
 
