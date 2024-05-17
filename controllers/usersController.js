@@ -81,8 +81,40 @@ const putUser = async (req = request, res = response) => {
         message: 'User updated',
         
     });
+};
 
-  
+
+const newPassword = async (req = request, res = response) => {
+    const { email, newPassword } = req.body;
+
+    try {
+        // Encuentra al usuario por correo electrónico
+        const user = await User.findOne({ where: { email } });
+
+        if (!user) {
+            return res.status(400).json({
+                success: false,
+                message: 'User not found'
+            });
+        }
+
+        // Hashea la nueva contraseña
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        // Actualiza la contraseña del usuario
+        await User.update({ password: hashedPassword }, { where: { email } });
+
+        res.status(200).json({
+            success: true,
+            message: 'Password changed successfully'
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'An error occurred while changing the password',
+            error: error.message
+        });
+    }
 };
 
 
@@ -90,5 +122,6 @@ const putUser = async (req = request, res = response) => {
 module.exports = {
     getUsers,
     changePassword,
-    putUser
+    putUser,
+    newPassword
 }
