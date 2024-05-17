@@ -26,7 +26,7 @@ router.post('/change-password', [
     validateFields
 ], changePassword);
 
-router.put('/new-password', [
+router.post('/new-password', [
     validateJWT,
     check('email', 'the field email is required').not().isEmpty(),
     check('newPassword', 'The new password is required').not().isEmpty(),

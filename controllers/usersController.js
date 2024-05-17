@@ -1,6 +1,7 @@
 const { request, response } = require("express")
 
 const User = require("../models/user")
+const bcrypt = require("bcryptjs");
 
 const emailHelper = require('../helpers/send-email');
 
@@ -25,6 +26,7 @@ const getUsers = async (req = request, res = response) => {
 
 
 const changePassword = async (req = request, res = response) => {
+    
     const { email } = req.body;
     console.log('email', email);
     
@@ -87,7 +89,10 @@ const putUser = async (req = request, res = response) => {
 const newPassword = async (req = request, res = response) => {
     const { email, newPassword } = req.body;
 
+
     try {
+        console.log("Actualmente en UserController.try")
+
         // Encuentra al usuario por correo electrónico
         const user = await User.findOne({ where: { email } });
 
@@ -99,7 +104,10 @@ const newPassword = async (req = request, res = response) => {
         }
 
         // Hashea la nueva contraseña
+        console.log("Se realizará el hash")
+
         const hashedPassword = await bcrypt.hash(newPassword, 10);
+        console.log("Hash realizado")
 
         // Actualiza la contraseña del usuario
         await User.update({ password: hashedPassword }, { where: { email } });
@@ -109,6 +117,8 @@ const newPassword = async (req = request, res = response) => {
             message: 'Password changed successfully'
         });
     } catch (error) {
+        console.log("ERROR ENCONTRADO")
+
         res.status(500).json({
             success: false,
             message: 'An error occurred while changing the password',
