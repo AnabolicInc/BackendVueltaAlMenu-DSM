@@ -30,6 +30,10 @@ module.exports = {
       password: {
         type: Sequelize.STRING
       },
+      verification_code: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
       role_id: {
         allowNull: false,
         type: Sequelize.INTEGER,

@@ -32,6 +32,8 @@ router.post('/register', [
 ], register);
 
 
+
+
 router.get('/validate-token', validateToken);
 
 module.exports = router;
