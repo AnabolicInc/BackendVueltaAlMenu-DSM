@@ -31,7 +31,7 @@ const changePassword = async (req = request, res = response) => {
     console.log('email', email);
     
 
-    console.log(email);
+    //console.log(email);
     const user = await User.findOne({ where: { email } });
     
     
@@ -47,6 +47,9 @@ const changePassword = async (req = request, res = response) => {
     // make verification code
     const verificationCode = 123489;
 
+    user.verification_code = verificationCode;
+    await user.save();
+
     await emailHelper.sendEmail(
         user.email,
         `Código de verificación por correo electrónico: ${verificationCode}`,
@@ -54,9 +57,39 @@ const changePassword = async (req = request, res = response) => {
         `<b>${verificationCode}</b>`
     );
 
-    res.status(200).send('Email Send');
+    res.status(200).json({
+        success: true,
+        message: 'Email sent'
+    });
 
 }
+//verify code
+const verifyCode = async (req = request, res = response) => {
+    const { email, code } = req.body;
+
+    const user = await User.findOne({ where: { email } });
+
+    if (!user) {
+        return res.status(400).json({
+            success: false,
+            message: 'User is not valid'
+        })
+    }
+
+    if (user.verification_code !== code) {
+        return res.status(400).json({
+            success: false,
+            message: 'Code is not valid'
+        })
+    }
+
+    res.status(200).json({
+        success: true,
+        message: 'Code is valid'
+    });
+
+}
+
 
 const putUser = async (req = request, res = response) => {
 
@@ -141,5 +174,9 @@ module.exports = {
     getUsers,
     changePassword,
     putUser,
-    newPassword
+
+    newPassword,
+    
+    verifyCode
+
 }
