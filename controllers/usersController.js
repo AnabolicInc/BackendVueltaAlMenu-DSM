@@ -89,7 +89,6 @@ const putUser = async (req = request, res = response) => {
 const newPassword = async (req = request, res = response) => {
     const { email, newPassword } = req.body;
 
-
     try {
         console.log("Actualmente en UserController.try")
 
@@ -99,13 +98,21 @@ const newPassword = async (req = request, res = response) => {
         if (!user) {
             return res.status(400).json({
                 success: false,
-                message: 'User not found'
+                message: 'Usuario no encontrado'
+            });
+        }
+
+        // Verifica si la nueva contraseña es la misma que la actual
+        const isSamePassword = await bcrypt.compare(newPassword, user.password);
+        if (isSamePassword) {
+            return res.status(400).json({
+                success: false,
+                message: 'La contraseña nueva debe ser distinta a la actual'
             });
         }
 
         // Hashea la nueva contraseña
         console.log("Se realizará el hash")
-
         const hashedPassword = await bcrypt.hash(newPassword, 10);
         console.log("Hash realizado")
 
@@ -114,18 +121,19 @@ const newPassword = async (req = request, res = response) => {
 
         res.status(200).json({
             success: true,
-            message: 'Password changed successfully'
+            message: 'Contraseña cambiada correctamente'
         });
     } catch (error) {
         console.log("ERROR ENCONTRADO")
 
         res.status(500).json({
             success: false,
-            message: 'An error occurred while changing the password',
+            message: 'Ocurrió un error durante el cambio de contraseña, intente nuevamente',
             error: error.message
         });
     }
 };
+
 
 
 
