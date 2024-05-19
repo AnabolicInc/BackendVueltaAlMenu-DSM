@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 
 const listCategories = async (req = request, res = response) => {
     try {
-        const categories = await Category.findAll();
+        const categories = await Category.findAll({where: {status: 1}});
 
         res.status(200).json({
             success: true,
