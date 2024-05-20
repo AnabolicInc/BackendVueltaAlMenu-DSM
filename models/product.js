@@ -7,6 +7,9 @@ class Product extends Model {
     static id;
     static name;
     static price;
+    static description;
+    static quantity;
+    static status;
     static category_id;
 }
 
@@ -16,6 +19,15 @@ Product.init({
     },
     price: {
         type: DataTypes.INTEGER,
+    },
+    description: {
+        type: DataTypes.STRING,
+    },
+    quantity: {
+        type: DataTypes.INTEGER,
+    },
+    status: {
+        type: DataTypes.BOOLEAN,
     },
 }, {
     sequelize: db,
