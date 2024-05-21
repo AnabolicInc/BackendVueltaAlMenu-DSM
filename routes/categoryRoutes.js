@@ -23,10 +23,9 @@ router.post('/updateCategory',[
 ], updateCategory);
 
 router.get('/listCategories', [
-    
 ], listCategories);
 
-router.delete('/deleteCategory/:id',[
+router.patch('/deleteCategory/:id',[
     validateFields
 ], deleteCategory);
 

@@ -106,7 +106,7 @@ const deleteCategory = async (req = request, res = response) => {
             });
         }
 
-        
+        await category.update({ status: 0 });
 
         res.status(201).json({
             success: true,
