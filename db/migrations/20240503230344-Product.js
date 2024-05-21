@@ -27,6 +27,7 @@ module.exports = {
       status: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
+        defaultValue: true,
       },
       category_id: {
         allowNull: false,
