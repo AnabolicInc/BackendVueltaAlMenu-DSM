@@ -32,7 +32,7 @@ router.get('/listProducts', [
     
 ], listProducts);
 
-router.delete('/deleteProduct/:id',[
+router.put('/deleteProduct/:id',[
     validateFields
 ], deleteProduct);
 

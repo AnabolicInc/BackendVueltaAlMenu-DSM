@@ -75,7 +75,12 @@ const createProduct = async (req = request, res = response) => {
 const updateProduct = async (req = request, res = response) => {
     try {
         const { id } = req.params;
-        const { name, description, image } = req.body;
+        const { 
+            name,
+            description,
+            price,
+            quantity
+        } = req.body;
 
         const product = await Product.findByPk(id);
 
@@ -86,7 +91,7 @@ const updateProduct = async (req = request, res = response) => {
             });
         }
 
-        await product.update({ name, description, image });
+        await product.update({ name, description, price, quantity });
 
         res.status(201).json({
             success: true,
@@ -112,14 +117,15 @@ const deleteProduct = async (req = request, res = response) => {
         if (!product) {
             return res.status(400).json({
                 success: false,
-                message: `Product not exist, ID: ${id}`
+                message: `Product does not exist, ID: ${id}`
             });
         }
 
-        await product.destroy();
+        await product.update({ status: false});
 
         res.status(201).json({
             success: true,
+            data: product,
             message: 'Product deleted'
         });
 
