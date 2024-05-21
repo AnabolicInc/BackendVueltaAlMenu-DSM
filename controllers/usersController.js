@@ -1,6 +1,7 @@
 const { request, response } = require("express")
 
 const User = require("../models/user")
+const bcrypt = require("bcryptjs");
 
 const emailHelper = require('../helpers/send-email');
 
@@ -25,11 +26,12 @@ const getUsers = async (req = request, res = response) => {
 
 
 const changePassword = async (req = request, res = response) => {
+    
     const { email } = req.body;
     console.log('email', email);
     
 
-    console.log(email);
+    //console.log(email);
     const user = await User.findOne({ where: { email } });
     
     
@@ -114,9 +116,57 @@ const putUser = async (req = request, res = response) => {
         message: 'User updated',
         
     });
-
-  
 };
+
+
+const newPassword = async (req = request, res = response) => {
+    const { email, newPassword } = req.body;
+
+    try {
+        console.log("Actualmente en UserController.try")
+
+        // Encuentra al usuario por correo electrónico
+        const user = await User.findOne({ where: { email } });
+
+        if (!user) {
+            return res.status(400).json({
+                success: false,
+                message: 'Usuario no encontrado'
+            });
+        }
+
+        // Verifica si la nueva contraseña es la misma que la actual
+        const isSamePassword = await bcrypt.compare(newPassword, user.password);
+        if (isSamePassword) {
+            return res.status(400).json({
+                success: false,
+                message: 'La contraseña nueva debe ser distinta a la actual'
+            });
+        }
+
+        // Hashea la nueva contraseña
+        console.log("Se realizará el hash")
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        console.log("Hash realizado")
+
+        // Actualiza la contraseña del usuario
+        await User.update({ password: hashedPassword }, { where: { email } });
+
+        res.status(200).json({
+            success: true,
+            message: 'Contraseña cambiada correctamente'
+        });
+    } catch (error) {
+        console.log("ERROR ENCONTRADO")
+
+        res.status(500).json({
+            success: false,
+            message: 'Ocurrió un error durante el cambio de contraseña, intente nuevamente',
+            error: error.message
+        });
+    }
+};
+
 
 
 
@@ -124,5 +174,9 @@ module.exports = {
     getUsers,
     changePassword,
     putUser,
+
+    newPassword,
+    
     verifyCode
+
 }

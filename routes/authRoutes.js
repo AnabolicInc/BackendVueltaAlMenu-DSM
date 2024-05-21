@@ -4,6 +4,7 @@ const { validateFields } = require("../middlewares/validate-fields");
 const { verifyEmailLogin,verifyEmail } = require("../helpers/verify-email");
 const { login, validateToken, updateDataUser } = require("../controllers/authController");
 const { register } = require("../controllers/authController");
+const { payment } = require("../controllers/authController");
 
 
 
@@ -35,5 +36,17 @@ router.post('/register', [
 
 
 router.get('/validate-token', validateToken);
+
+
+router.post('/payment', [
+    check('holder_name', 'The holder_name field is required').not().isEmpty(),
+    check('card_number', 'The card_number field is required').not().isEmpty(),
+    check('expiration_date', 'The expiration_date field is required').not().isEmpty(),
+    check('cvc', 'The cvc field is required').not().isEmpty(),
+    check('cuotes', 'The cuotes field is required').not().isEmpty(),
+    check('type', 'The type field is required').not().isEmpty(),
+    validateFields
+], payment);
+
 
 module.exports = router;

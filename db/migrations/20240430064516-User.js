@@ -2,6 +2,7 @@
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
+
   async up(queryInterface, Sequelize) {
     return queryInterface.createTable('Users', {
       id: {
@@ -54,16 +55,17 @@ module.exports = {
       }
     });
 
-  },
 
-  async down(queryInterface, Sequelize) {
+	},
 
-    
-    /**
-     * Add reverting commands here.
-    *
-    * Example:
-      await queryInterface.dropTable('users');
-     */
-  }
+	async down(queryInterface, Sequelize) {
+
+
+		/**
+		 * Add reverting commands here.
+		*
+		* Example:
+		  await queryInterface.dropTable('users');
+		 */
+	}
 };

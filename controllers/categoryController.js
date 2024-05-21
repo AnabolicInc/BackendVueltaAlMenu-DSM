@@ -7,8 +7,15 @@ const jwt = require("jsonwebtoken");
 
 const listCategories = async (req = request, res = response) => {
     try {
-        const categories = await Category.findAll();
+        const categories = await Category.findAll({where: {status: 1}});
 
+        if (!categories) {
+            return res.status(400).json({
+                success: false,
+                message: 'Categories not found'
+            });
+        }
+        
         res.status(200).json({
             success: true,
             data: categories
@@ -29,7 +36,16 @@ const createCategory = async (req = request, res = response) => {
             description
         } = req.body;
 
-        const category = await Category.create({ name , description, status: 1 });
+        const findCategory = await Category.findOne({where: {name: name.toUpperCase()}})
+
+        if (findCategory) {
+            return res.status(400).json({
+                success: false,
+                message: `Category already exist, name: ${name}`
+            });
+        }
+        
+        const category = await Category.create({ name: name.toUpperCase(), description, status: 1 });
 
         res.status(201).json({
             success: true,
@@ -49,7 +65,7 @@ const createCategory = async (req = request, res = response) => {
 const updateCategory = async (req = request, res = response) => {
     try {
         const { id } = req.params;
-        const { name } = req.body;
+        const { name, description, image } = req.body;
 
         const category = await Category.findByPk(id);
 
@@ -60,7 +76,7 @@ const updateCategory = async (req = request, res = response) => {
             });
         }
 
-        await category.update({ name });
+        await category.update({ name, description, image });
 
         res.status(201).json({
             success: true,
@@ -80,7 +96,7 @@ const updateCategory = async (req = request, res = response) => {
 const deleteCategory = async (req = request, res = response) => {
     try {
         const { id } = req.params;
-
+        
         const category = await Category.findByPk(id);
 
         if (!category) {
@@ -90,7 +106,7 @@ const deleteCategory = async (req = request, res = response) => {
             });
         }
 
-        await category.destroy();
+        await category.update({ status: 0 });
 
         res.status(201).json({
             success: true,

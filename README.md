@@ -11,7 +11,7 @@ Aquí se encuentran los comandos que se utilizarán en el backend:
 
 - `npm i mysql2 `: Instala las dependencias de mysql.
 - `npm install -g nodemon `: Instala globalmente nodemon.
-- `npm i sequelize `: Instalar sequelize.
+- `npm install -g sequelize-cli`: Instalar sequelize.
 - `npm i sequelize-cli `: Instala sequelize-cli.
 - `npm install cloudinary `: Instala cloudinary.
 
@@ -23,35 +23,34 @@ con permisos de admin e ingresar los siguientes comandos:
 
 
 # Commands Migrations
-## Create Migration:
-
+Create Migration:
 `sequelize migration:generate --name [name_migration]`
 
-## Revert last Migration:
+Revert last Migration:
 
 `sequelize db:migrate:undo`
 
-## Revert All Migrations:
+Revert All Migrations:
 
 `sequelize db:migrate:undo:all`
 
-## Execute Migrations:
+Execute Migrations:
 
 sequelize db:migrate
 
 # Commands Seeders
-## Create Seeder:
+Create Seeder:
 
 `sequelize seed:generate --name [name_seeder]`
 
-## Revert last Seeder:
+Revert last Seeder:
 
 `sequelize db:seeder:undo`
 
-## Revert All Seeders:
+Revert All Seeders:
 
 `sequelize db:seeder:undo:all`
 
-## Execute Seeders:
+Execute Seeders:
 
 `sequelize db:seed:all`
