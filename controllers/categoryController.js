@@ -58,7 +58,7 @@ const createCategory = async (req = request, res = response) => {
 const updateCategory = async (req = request, res = response) => {
     try {
         const { id } = req.params;
-        const { name } = req.body;
+        const { name, description, image } = req.body;
 
         const category = await Category.findByPk(id);
 
@@ -69,7 +69,7 @@ const updateCategory = async (req = request, res = response) => {
             });
         }
 
-        await category.update({ name });
+        await category.update({ name, description, image });
 
         res.status(201).json({
             success: true,

@@ -70,7 +70,7 @@ class Server {
         this.app.use(this.paths.user, require('../routes/userRoutes'));
         this.app.use(this.paths.upload, require('../routes/uploadRoutes'));
         this.app.use(this.paths.category, require('../routes/categoryRoutes'));
-        //this.app.use(this.paths.product, require('../routes/productRoutes')); 
+        this.app.use(this.paths.product, require('../routes/productRoutes')); 
     }
 
     listen() {
