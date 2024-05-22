@@ -1,7 +1,7 @@
 const { check } = require("express-validator");
 const { Router, request, response } = require("express");
 const { validateFields } = require("../middlewares/validate-fields");
-const { createProduct, updateProduct, listProducts, deleteProduct } = require("../controllers/productController");
+const { createProduct, getProduct, updateProduct, listProducts, deleteProduct } = require("../controllers/productController");
 
 
 const router = Router(); 
@@ -18,7 +18,9 @@ router.post('/createProduct/:category_id',[
     validateFields
 ], createProduct);
 
-
+router.get('/getProduct/:id', [
+    
+], getProduct);
 
 router.put('/updateProduct/:id',[
     check('name', 'the field name is required').not().isEmpty(),
@@ -32,7 +34,7 @@ router.put('/updateProduct/:id',[
     validateFields
 ], updateProduct);
 
-router.get('/listProducts', [
+router.get('/listProducts/:category_id', [
     
 ], listProducts);
 
