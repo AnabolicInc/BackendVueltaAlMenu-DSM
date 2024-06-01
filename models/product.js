@@ -36,6 +36,6 @@ Product.init({
 });
 
 Product.Category = Product.belongsTo(require('./category'), {foreignKey: 'category_id'});
-
+Product.Images = Product.hasMany(require('./image'), {foreignKey: 'image_id'});
 
 module.exports = Product;

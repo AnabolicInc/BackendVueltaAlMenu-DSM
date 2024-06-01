@@ -5,7 +5,9 @@ class Image extends Model {
     static id;
     static uri;
     static product_id;
+
 }   
+
 
 Image.init({
     uri: {
@@ -15,7 +17,8 @@ Image.init({
         type: DataTypes.INTEGER,
     },
 }, {
-    sequelize: db,
-    modelName: 'Image',
-
+    sequelize : db,
+    modelName: 'Image,'
 });
+
+module.exports=Image;
