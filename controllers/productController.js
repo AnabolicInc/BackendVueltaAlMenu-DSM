@@ -27,18 +27,10 @@ const listProducts = async (req = request, res = response) => {
 
 const createProduct = async (req = request, res = response) => {
     try {
-
         const { category_id } = req.params;
-
-        const { 
-            name,
-            description,
-            price,
-            quantity
-        } = req.body;
+        const { name, description, price, quantity } = req.body;
 
         const category = await Category.findByPk(category_id);
-
         if (!category) {
             return res.status(400).json({
                 success: false,
@@ -46,17 +38,15 @@ const createProduct = async (req = request, res = response) => {
             });
         }
 
-        const findProduct = await Product.findOne({where: {name: name.toUpperCase()}})
-
+        const findProduct = await Product.findOne({ where: { name: name.toUpperCase() } });
         if (findProduct) {
             return res.status(400).json({
                 success: false,
                 message: `Product already exist, name: ${name}`
             });
         }
-        
-        const product = await Product.create({ name: name.toUpperCase(), description, price, quantity, category_id });
 
+        const product = await Product.create({ name: name.toUpperCase(), description, price, quantity, category_id });
         res.status(201).json({
             success: true,
             data: product,
@@ -71,6 +61,7 @@ const createProduct = async (req = request, res = response) => {
         });
     }
 }
+
 
 const updateProduct = async (req = request, res = response) => {
     try {
