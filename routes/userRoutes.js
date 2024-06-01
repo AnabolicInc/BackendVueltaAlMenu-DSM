@@ -35,7 +35,7 @@ router.post('/new-password', [
     validateFields
 ], newPassword);
 
-router.post('/verifyCode',[
+router.post('/verify-code',[
     check('email', 'the field email is required').not().isEmpty(),
     check('code', 'the field code is required').not().isEmpty(),
     check('email', 'this not valid email').isEmail(),
