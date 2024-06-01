@@ -9,7 +9,28 @@ const jwt = require("jsonwebtoken");
 
 const listProducts = async (req = request, res = response) => {
     try {
-        const products = await Product.findAll();
+        //search if product status is true
+        const products = await Product.findAll({where: {status: true}});
+
+        res.status(200).json({
+            success: true,
+            data: products
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: 'Server error'
+        });
+    }
+}
+
+const listProductsByCategory = async (req = request, res = response) => {
+    try {
+        
+        //search if product status is true and category_id is equal to category_id
+        const products = await Product.findAll({where: {status: true, category_id: req.params.category_id}});
 
         res.status(200).json({
             success: true,
@@ -171,5 +192,6 @@ module.exports = {
     listProducts,
     createProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    listProductsByCategory,
 }
