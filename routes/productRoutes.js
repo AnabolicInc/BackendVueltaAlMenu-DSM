@@ -18,7 +18,9 @@ router.post('/createProduct/:category_id',[
     validateFields
 ], createProduct);
 
-
+router.get('/getProduct/:id', [
+    
+], getProduct);
 
 router.put('/updateProduct/:id',[
     check('name', 'the field name is required').not().isEmpty(),
