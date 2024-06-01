@@ -5,7 +5,9 @@ class Image extends Model {
     static id;
     static uri;
     static product_id;
-}
+
+}   
+
 
 Image.init({
     uri: {

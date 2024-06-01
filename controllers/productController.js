@@ -9,7 +9,9 @@ const jwt = require("jsonwebtoken");
 
 const listProducts = async (req = request, res = response) => {
     try {
-        const products = await Product.findAll();
+
+        //search if product status is true
+        const products = await Product.findAll({where: {status: true}});
 
         res.status(200).json({
             success: true,
@@ -25,6 +27,55 @@ const listProducts = async (req = request, res = response) => {
     }
 }
 
+const listProductsByCategory = async (req = request, res = response) => {
+    try {
+        
+        //search if product status is true and category_id is equal to category_id
+        const products = await Product.findAll({where: {status: true, category_id: req.params.category_id}});
+
+
+        res.status(200).json({
+            success: true,
+            data: products
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: 'Server error'
+        });
+    }
+}
+
+const deleteCategory = async (req = request, res = response) => {
+    try {
+        const { id } = req.params;
+        
+        const category = await Category.findByPk(id);
+
+        if (!category) {
+            return res.status(400).json({
+                success: false,
+                message: `Category not exist, ID: ${id}`
+            });
+        }
+
+        await category.update({ status: 0 });
+
+        res.status(201).json({
+            success: true,
+            message: 'Category deleted'
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: 'Server error'
+        });
+    }
+}
 const createProduct = async (req = request, res = response) => {
     try {
         const { category_id } = req.params;
@@ -51,6 +102,34 @@ const createProduct = async (req = request, res = response) => {
             success: true,
             data: product,
             message: 'Product created'
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: 'Server error'
+        });
+    }
+}
+
+
+const getProduct = async (req = request, res = response) => {
+    try {
+        const { id } = req.params;
+
+        const product = await Product.findByPk(id);
+
+        if (!product) {
+            return res.status(400).json({
+                success: false,
+                message: `Product does not exist, ID: ${id}`
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            data: product
         });
 
     } catch (error) {
@@ -133,6 +212,8 @@ const deleteProduct = async (req = request, res = response) => {
 module.exports = {
     listProducts,
     createProduct,
+    getProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    listProductsByCategory,
 }

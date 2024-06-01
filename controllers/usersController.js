@@ -125,7 +125,7 @@ const newPassword = async (req = request, res = response) => {
     try {
         console.log("Actualmente en UserController.try")
 
-        // Encuentra al usuario por correo electrónico
+        
         const user = await User.findOne({ where: { email } });
 
         if (!user) {
