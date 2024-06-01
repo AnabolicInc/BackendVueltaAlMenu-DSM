@@ -1,7 +1,7 @@
 const { check } = require("express-validator");
 const { Router, request, response } = require("express");
 const { validateFields } = require("../middlewares/validate-fields");
-const { createProduct, getProduct, updateProduct, listProducts, deleteProduct } = require("../controllers/productController");
+const { createProduct, updateProduct, listProducts, deleteProduct, listProductsByCategory } = require("../controllers/productController");
 
 
 const router = Router(); 
@@ -34,9 +34,13 @@ router.put('/updateProduct/:id',[
     validateFields
 ], updateProduct);
 
-router.get('/listProducts/:category_id', [
+router.get('/listProducts', [
     
 ], listProducts);
+
+router.get('/listProducts:category_id', [
+    
+], listProductsByCategory);
 
 router.put('/deleteProduct/:id',[
     validateFields

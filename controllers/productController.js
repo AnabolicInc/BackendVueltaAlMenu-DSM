@@ -9,16 +9,30 @@ const jwt = require("jsonwebtoken");
 
 const listProducts = async (req = request, res = response) => {
     try {
-        const { category_id } = req.params;
 
-        const products = await Product.findAll({where: {category_id}});
+        //search if product status is true
+        const products = await Product.findAll({where: {status: true}});
 
-        if (!products) {
-            return res.status(400).json({
-                success: false,
-                message: `Category does not exist, ID: ${category_id}`
-            });
-        }
+        res.status(200).json({
+            success: true,
+            data: products
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: 'Server error'
+        });
+    }
+}
+
+const listProductsByCategory = async (req = request, res = response) => {
+    try {
+        
+        //search if product status is true and category_id is equal to category_id
+        const products = await Product.findAll({where: {status: true, category_id: req.params.category_id}});
+
 
         res.status(200).json({
             success: true,
@@ -208,5 +222,6 @@ module.exports = {
     createProduct,
     getProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    listProductsByCategory,
 }
