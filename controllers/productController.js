@@ -5,15 +5,32 @@ const { check } = require("express-validator");
 const bcryptjs = require("bcryptjs");
 const generateJWT = require("../helpers/generate-jwt");
 const jwt = require("jsonwebtoken");
+const Image = require("../models/image");
 
 
 const listProducts = async (req = request, res = response) => {
     try {
-        const products = await Product.findAll();
+        const products = await Product.findAll({
+            include: [{
+                model: Image,
+                as: 'Images',
+                attributes: ['id', 'uri'],
+                order: [['id', 'ASC']],
+            }]
+        });
+
+        const productsWithImages = products.map(product => {
+            const images = product.Images;
+            const mainImage = images.length > 0 ? images[0].uri : null;
+            return {
+                ...product.toJSON(),
+                image: mainImage
+            };
+        });
 
         res.status(200).json({
             success: true,
-            data: products
+            data: productsWithImages
         });
 
     } catch (error) {
