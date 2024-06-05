@@ -1,31 +1,28 @@
-const {response, request} = require('express');
+const { response, request } = require('express');
 require('dotenv').config();
 const cloudinary = require('cloudinary').v2;
 const User = require('../models/user');
 const Category = require('../models/category');
+const Image = require('../models/image');  // Asegúrate de tener un modelo de 'images'
 
-cloudinary.config({ 
-    cloud_name: process.env.CLOUD_NAME, 
-    api_key: process.env.API_KEY, 
+cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.API_KEY,
     api_secret: process.env.API_SECRET
 });
 
-const  updateImageCloudinary = async (req = request, res = response) => {
-
-
+const updateImageCloudinary = async (req = request, res = response) => {
     try {
+        const { collection, id } = req.params;  // Extrae los parámetros 'collection' e 'id' de la URL
+        console.log({ collection, id });
 
-        
-        const { collection, id } = req.params;
-        console.log({collection, id});
-        
         let model;
 
+        // Busca el modelo correspondiente según la colección
         switch (collection) {
             case 'users':
-                model = await User.findByPk(id);
-
-                if(!model){
+                model = await User.findByPk(id);  // Busca un usuario por su ID
+                if (!model) {
                     return res.status(400).json({
                         success: false,
                         message: `User not exist, ID: ${id}`
@@ -33,12 +30,18 @@ const  updateImageCloudinary = async (req = request, res = response) => {
                 }
                 break;
             case 'categories':
-                model = await Category.findByPk(id);
-                if(!model){
-                     return res.status(400).json({
-                         success: false,
-                         message: `Category not exist, ID: ${id}`
-                     });
+                model = await Category.findByPk(id);  // Busca una categoría por su ID
+                if (!model) {
+                    return res.status(400).json({
+                        success: false,
+                        message: `Category not exist, ID: ${id}`
+                    });
+                }
+                break;
+            case 'images':
+                model = await Image.findByPk(id);  // Busca una imagen por su ID
+                if (!model) {
+                    model = new Image({ product_id: id });  // Asigna solo product_id
                 }
                 break;
             default:
@@ -46,32 +49,32 @@ const  updateImageCloudinary = async (req = request, res = response) => {
                     success: false,
                     message: 'The option is not valid'
                 });
-                break;
         }
 
-        if(model.image){
-            const nameImageArray = model.image.split('/');
+        // Si el modelo ya tiene una imagen, elimina la imagen existente en Cloudinary
+        if (model.uri) {
+            const nameImageArray = model.uri.split('/');
             const nameImage = nameImageArray[nameImageArray.length - 1];
-            const [ public_id ] = nameImage.split('.');
-            cloudinary.uploader.destroy(`StorageImagesAppDelivery/${collection}/${public_id}`);
+            const [public_id] = nameImage.split('.');
+            await cloudinary.uploader.destroy(`StorageImagesAppDelivery/${collection}/${public_id}`);
         }
 
-
-        const {tempFilePath} = req.files.archive;
+        const { tempFilePath } = req.files.archive;  // Extrae la ruta temporal del archivo de la solicitud
         const { secure_url } = await cloudinary.uploader.upload(tempFilePath, {
-            folder: `StorageImagesAppDelivery/${collection}`
+            folder: `StorageImagesAppDelivery/${collection}`  // Sube la imagen a Cloudinary en la carpeta especificada
         });
 
-        // Update image to user
-        model.image = secure_url;
-        await model.save();
+        // Actualiza el campo 'uri' del modelo con la URL segura de Cloudinary
+        model.uri = secure_url;
 
+        console.log('DATOS' + model, model.dataValues);
+        await model.save();  // Guarda el modelo actualizado en la base de datos
 
         console.log(tempFilePath);
         res.status(201).json({
             success: true,
             message: 'Image uploaded',
-            data: model.image
+            data: model.uri
         });
 
     } catch (error) {
@@ -80,7 +83,6 @@ const  updateImageCloudinary = async (req = request, res = response) => {
             success: false,
             message: 'Internal server error'
         });
-
     }
 }
 
