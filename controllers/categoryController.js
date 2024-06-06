@@ -7,8 +7,15 @@ const jwt = require("jsonwebtoken");
 
 const listCategories = async (req = request, res = response) => {
     try {
-        const categories = await Category.findAll();
+        const categories = await Category.findAll({where: {status: 1}});
 
+        if (!categories) {
+            return res.status(400).json({
+                success: false,
+                message: 'Categories not found'
+            });
+        }
+        
         res.status(200).json({
             success: true,
             data: categories
@@ -89,7 +96,7 @@ const updateCategory = async (req = request, res = response) => {
 const deleteCategory = async (req = request, res = response) => {
     try {
         const { id } = req.params;
-
+        
         const category = await Category.findByPk(id);
 
         if (!category) {
@@ -99,7 +106,7 @@ const deleteCategory = async (req = request, res = response) => {
             });
         }
 
-        await category.destroy();
+        await category.update({ status: 0 });
 
         res.status(201).json({
             success: true,
