@@ -3,7 +3,7 @@ require('dotenv').config();
 const cloudinary = require('cloudinary').v2;
 const User = require('../models/user');
 const Category = require('../models/category');
-const Image = require('../models/image');  // Asegúrate de tener un modelo de 'images'
+const Image = require('../models/image');
 
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
@@ -11,17 +11,43 @@ cloudinary.config({
     api_secret: process.env.API_SECRET
 });
 
-const updateImageCloudinary = async (req = request, res = response) => {
+const uploadToCloudinary = async (filePath, folder) => {
     try {
-        const { collection, id } = req.params;  // Extrae los parámetros 'collection' e 'id' de la URL
-        console.log({ collection, id });
+        const result = await cloudinary.uploader.upload(filePath, {
+            folder: `StorageImagesAppDelivery/${folder}`
+        });
+        return result.secure_url;
+    } catch (error) {
+        throw new Error('Error uploading to Cloudinary');
+    }
+};
 
+const deleteFromCloudinary = async (url, folder) => {
+    if (!url) return;
+    const nameImageArray = url.split('/');
+    const nameImage = nameImageArray[nameImageArray.length - 1];
+    const [public_id] = nameImage.split('.');
+    await cloudinary.uploader.destroy(`StorageImagesAppDelivery/${folder}/${public_id}`);
+};
+
+const updateImageCloudinary = async (req = request, res = response) => {
+    const { collection, id } = req.params;
+    const { files } = req;
+    const uploadedImages = [];
+
+    if (!files || !files.archive) {
+        return res.status(400).json({
+            success: false,
+            message: 'No files were uploaded'
+        });
+    }
+
+    try {
         let model;
 
-        // Busca el modelo correspondiente según la colección
         switch (collection) {
             case 'users':
-                model = await User.findByPk(id);  // Busca un usuario por su ID
+                model = await User.findByPk(id);
                 if (!model) {
                     return res.status(400).json({
                         success: false,
@@ -30,7 +56,7 @@ const updateImageCloudinary = async (req = request, res = response) => {
                 }
                 break;
             case 'categories':
-                model = await Category.findByPk(id);  // Busca una categoría por su ID
+                model = await Category.findByPk(id);
                 if (!model) {
                     return res.status(400).json({
                         success: false,
@@ -39,9 +65,9 @@ const updateImageCloudinary = async (req = request, res = response) => {
                 }
                 break;
             case 'images':
-                model = await Image.findByPk(id);  // Busca una imagen por su ID
+                model = await Image.findByPk(id);
                 if (!model) {
-                    model = new Image({ product_id: id });  // Asigna solo product_id
+                    model = new Image({ product_id: id });
                 }
                 break;
             default:
@@ -51,30 +77,35 @@ const updateImageCloudinary = async (req = request, res = response) => {
                 });
         }
 
-        // Si el modelo ya tiene una imagen, elimina la imagen existente en Cloudinary
-        if (model.uri) {
-            const nameImageArray = model.uri.split('/');
-            const nameImage = nameImageArray[nameImageArray.length - 1];
-            const [public_id] = nameImage.split('.');
-            await cloudinary.uploader.destroy(`StorageImagesAppDelivery/${collection}/${public_id}`);
+        if (collection === 'categories' && model.image) {
+            await deleteFromCloudinary(model.image, collection);
+        } else if (collection === 'images' && model.uri) {
+            await deleteFromCloudinary(model.uri, collection);
         }
 
-        const { tempFilePath } = req.files.archive;  // Extrae la ruta temporal del archivo de la solicitud
-        const { secure_url } = await cloudinary.uploader.upload(tempFilePath, {
-            folder: `StorageImagesAppDelivery/${collection}`  // Sube la imagen a Cloudinary en la carpeta especificada
-        });
+        const fileArray = Array.isArray(files.archive) ? files.archive : [files.archive];
 
-        // Actualiza el campo 'uri' del modelo con la URL segura de Cloudinary
-        model.uri = secure_url;
+        for (const file of fileArray) {
+            const { tempFilePath } = file;
+            const secure_url = await uploadToCloudinary(tempFilePath, collection);
+            uploadedImages.push(secure_url);
 
-        console.log('DATOS' + model, model.dataValues);
-        await model.save();  // Guarda el modelo actualizado en la base de datos
+            if (collection === 'categories') {
+                model.image = secure_url;
+                await model.save();
+            } else if (collection === 'images') {
+                const imageRecord = new Image({
+                    uri: secure_url,
+                    product_id: id
+                });
+                await imageRecord.save();
+            }
+        }
 
-        console.log(tempFilePath);
         res.status(201).json({
             success: true,
-            message: 'Image uploaded',
-            data: model.uri
+            message: 'Images uploaded',
+            data: uploadedImages
         });
 
     } catch (error) {
@@ -84,8 +115,8 @@ const updateImageCloudinary = async (req = request, res = response) => {
             message: 'Internal server error'
         });
     }
-}
+};
 
 module.exports = {
     updateImageCloudinary
-}
+};
