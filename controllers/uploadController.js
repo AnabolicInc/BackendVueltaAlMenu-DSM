@@ -77,7 +77,7 @@ const updateImageCloudinary = async (req = request, res = response) => {
                 });
         }
 
-        if (collection === 'categories' && model.image) {
+        if ((collection === 'categories' && model.image) || (collection === 'users' && model.image)) {
             await deleteFromCloudinary(model.image, collection);
         } else if (collection === 'images' && model.uri) {
             await deleteFromCloudinary(model.uri, collection);
@@ -90,7 +90,7 @@ const updateImageCloudinary = async (req = request, res = response) => {
             const secure_url = await uploadToCloudinary(tempFilePath, collection);
             uploadedImages.push(secure_url);
 
-            if (collection === 'categories') {
+            if (collection === 'categories' || collection === 'users') {
                 model.image = secure_url;
                 await model.save();
             } else if (collection === 'images') {
@@ -102,10 +102,13 @@ const updateImageCloudinary = async (req = request, res = response) => {
             }
         }
 
+        // Si es una categoría o un usuario, devolvemos solo una URL
+        const responseData = (collection === 'categories' || collection === 'users') ? uploadedImages[0] : uploadedImages;
+
         res.status(201).json({
             success: true,
             message: 'Images uploaded',
-            data: uploadedImages
+            data: responseData
         });
 
     } catch (error) {
