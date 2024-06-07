@@ -102,13 +102,6 @@ const putUser = async (req = request, res = response) => {
     const updatedUser = await User.findByPk(id); // get user updated
 
     console.log(responseUpdate);
-    
-    if (responseUpdate[0] === 0) {
-        return res.status(400).json({
-            success: false,
-            message: 'User not found'
-        })
-    }
 
     res.status(201).json({
         success: true,
