@@ -31,7 +31,7 @@ const listProducts = async (req = request, res = response) => {
 
 
         //search if product status is true
-        const products = await Product.findAll({where: {status: true}});
+        //
 
 
         res.status(200).json({
