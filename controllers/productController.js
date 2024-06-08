@@ -12,7 +12,8 @@ const Image = require("../models/image");
 const listProducts = async (req = request, res = response) => {
     try {
       
-        const products = await Product.findAll({{where: {status: 1}}
+        const products = await Product.findAll({
+            where: { status: 1 },
             include: [{
                 model: Image,
                 as: 'Images',
