@@ -156,6 +156,12 @@ const updateProduct = async (req = request, res = response) => {
             });
         }
 
+        if (price <= 0 || quantity <= 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'Price and quantity must be greater than 0'
+            });
+        }
         await product.update({ name, description, price, quantity });
 
         res.status(201).json({
