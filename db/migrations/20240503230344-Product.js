@@ -12,6 +12,7 @@ module.exports = {
       },
       name: {
         type: Sequelize.STRING,
+        unique: true,
       },
       price: {
         type: Sequelize.INTEGER,
