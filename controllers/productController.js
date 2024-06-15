@@ -16,29 +16,15 @@ const listProducts = async (req = request, res = response) => {
             where: { status: 1 },
             include: [{
                 model: Image,
-                as: 'Images',
-                attributes: ['id', 'uri'],
+                as: 'images',
+                attributes: ['id', 'uri', 'product_id'],
                 order: [['id', 'ASC']],
             }]
         });
 
-        const productsWithImages = products.map(product => {
-            const images = product.Images;
-            const mainImage = images.length > 0 ? images[0].uri : null;
-            return {
-                ...product.toJSON(),
-                image: mainImage
-            };
-        });
-
-
-        //search if product status is true
-        //
-
-
         res.status(200).json({
             success: true,
-            data: productsWithImages
+            data: products
         });
 
     } catch (error) {
