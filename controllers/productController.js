@@ -16,29 +16,15 @@ const listProducts = async (req = request, res = response) => {
             where: { status: 1 },
             include: [{
                 model: Image,
-                as: 'Images',
-                attributes: ['id', 'uri'],
+                as: 'images',
+                attributes: ['id', 'uri', 'product_id'],
                 order: [['id', 'ASC']],
             }]
         });
 
-        const productsWithImages = products.map(product => {
-            const images = product.Images;
-            const mainImage = images.length > 0 ? images[0].uri : null;
-            return {
-                ...product.toJSON(),
-                image: mainImage
-            };
-        });
-
-
-        //search if product status is true
-        //
-
-
         res.status(200).json({
             success: true,
-            data: productsWithImages
+            data: products
         });
 
     } catch (error) {
@@ -156,6 +142,12 @@ const updateProduct = async (req = request, res = response) => {
             });
         }
 
+        if (price <= 0 || quantity <= 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'Price and quantity must be greater than 0'
+            });
+        }
         await product.update({ name, description, price, quantity });
 
         res.status(201).json({
