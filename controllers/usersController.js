@@ -102,13 +102,6 @@ const putUser = async (req = request, res = response) => {
     const updatedUser = await User.findByPk(id); // get user updated
 
     console.log(responseUpdate);
-    
-    if (responseUpdate[0] === 0) {
-        return res.status(400).json({
-            success: false,
-            message: 'User not found'
-        })
-    }
 
     res.status(201).json({
         success: true,
@@ -125,7 +118,7 @@ const newPassword = async (req = request, res = response) => {
     try {
         console.log("Actualmente en UserController.try")
 
-        // Encuentra al usuario por correo electrónico
+        
         const user = await User.findOne({ where: { email } });
 
         if (!user) {

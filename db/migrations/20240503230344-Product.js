@@ -12,10 +12,23 @@ module.exports = {
       },
       name: {
         type: Sequelize.STRING,
+        unique: true,
       },
       price: {
         type: Sequelize.INTEGER,
         allowNull: false,
+      },
+      description: {
+        type: Sequelize.STRING,
+      },
+      quantity: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
+      status: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
       },
       category_id: {
         allowNull: false,

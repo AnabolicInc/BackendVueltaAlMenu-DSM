@@ -16,17 +16,18 @@ router.post('/createCategory',[
 
 
 
-router.post('/updateCategory',[
+router.put('/updateCategory/:id',[
     check('name', 'the field name is required').not().isEmpty(),
     check('name', 'the field name is required').isString(),
+    check('description', 'the field description is required').not().isEmpty(),
+    check('description', 'the field description is required').isString(),
     validateFields
 ], updateCategory);
 
 router.get('/listCategories', [
-    
 ], listCategories);
 
-router.delete('/deleteCategory/:id',[
+router.patch('/deleteCategory/:id',[
     validateFields
 ], deleteCategory);
 

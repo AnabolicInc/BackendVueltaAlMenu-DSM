@@ -7,6 +7,9 @@ class Product extends Model {
     static id;
     static name;
     static price;
+    static description;
+    static quantity;
+    static status;
     static category_id;
 }
 
@@ -17,6 +20,15 @@ Product.init({
     price: {
         type: DataTypes.INTEGER,
     },
+    description: {
+        type: DataTypes.STRING,
+    },
+    quantity: {
+        type: DataTypes.INTEGER,
+    },
+    status: {
+        type: DataTypes.BOOLEAN,
+    },
 }, {
     sequelize: db,
     modelName: 'Product',
@@ -24,6 +36,6 @@ Product.init({
 });
 
 Product.Category = Product.belongsTo(require('./category'), {foreignKey: 'category_id'});
-
+Product.hasMany(require('./image'), { as: 'images',foreignKey: 'product_id'});
 
 module.exports = Product;

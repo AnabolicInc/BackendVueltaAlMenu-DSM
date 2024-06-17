@@ -19,7 +19,8 @@ class Server {
             user: '/api/user',
             upload: '/api/upload',
             category: '/api/category',
-            product: '/api/product'
+            product: '/api/product',
+            payment: '/api/payment',
 
         }
 
@@ -70,7 +71,8 @@ class Server {
         this.app.use(this.paths.user, require('../routes/userRoutes'));
         this.app.use(this.paths.upload, require('../routes/uploadRoutes'));
         this.app.use(this.paths.category, require('../routes/categoryRoutes'));
-        //this.app.use(this.paths.product, require('../routes/productRoutes')); 
+        this.app.use(this.paths.product, require('../routes/productRoutes')); 
+        // this.app.use(this.paths.payment, require('../routes/paymentRoutes')); 
     }
 
     listen() {
