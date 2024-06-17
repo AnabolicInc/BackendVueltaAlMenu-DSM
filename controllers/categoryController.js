@@ -36,17 +36,26 @@ const createCategory = async (req = request, res = response) => {
             description
         } = req.body;
 
-        const findCategory = await Category.findOne({where: {name: name.toUpperCase()}})
-
+        const findCategory = await Category.findOne({ where: { name: name.toUpperCase() } })
+        console.log(findCategory);
         if (findCategory) {
-            return res.status(400).json({
-                success: false,
-                message: `Category already exist, name: ${name}`
+            if (findCategory.status === true) {
+                return res.status(400).json({
+                    success: false,
+                    message: `Category already exist, name: ${name}`
+                });
+            }
+
+            await findCategory.update({ status: 1, description: description });
+            return res.status(201).json({
+                success: true,
+                data: findCategory,
+                message: 'Category created'
             });
         }
-        
-        const category = await Category.create({ name: name.toUpperCase(), description, status: 1 });
 
+        const formattedName = name.toUpperCase();
+        const category = await Category.create({ name: formattedName.trim(), description, status: 1 });
         res.status(201).json({
             success: true,
             data: category,

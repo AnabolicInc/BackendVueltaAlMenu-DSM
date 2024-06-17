@@ -5,13 +5,22 @@ const { check } = require("express-validator");
 const bcryptjs = require("bcryptjs");
 const generateJWT = require("../helpers/generate-jwt");
 const jwt = require("jsonwebtoken");
+const { where } = require("sequelize");
+const Image = require("../models/image");
 
 
 const listProducts = async (req = request, res = response) => {
     try {
-
-        //search if product status is true
-        const products = await Product.findAll({where: {status: true}});
+      
+        const products = await Product.findAll({
+            where: { status: 1 },
+            include: [{
+                model: Image,
+                as: 'images',
+                attributes: ['id', 'uri', 'product_id'],
+                order: [['id', 'ASC']],
+            }]
+        });
 
         res.status(200).json({
             success: true,
@@ -48,34 +57,6 @@ const listProductsByCategory = async (req = request, res = response) => {
     }
 }
 
-const deleteCategory = async (req = request, res = response) => {
-    try {
-        const { id } = req.params;
-        
-        const category = await Category.findByPk(id);
-
-        if (!category) {
-            return res.status(400).json({
-                success: false,
-                message: `Category not exist, ID: ${id}`
-            });
-        }
-
-        await category.update({ status: 0 });
-
-        res.status(201).json({
-            success: true,
-            message: 'Category deleted'
-        });
-
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({
-            success: false,
-            message: 'Server error'
-        });
-    }
-}
 const createProduct = async (req = request, res = response) => {
     try {
         const { category_id } = req.params;
@@ -161,6 +142,12 @@ const updateProduct = async (req = request, res = response) => {
             });
         }
 
+        if (price <= 0 || quantity <= 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'Price and quantity must be greater than 0'
+            });
+        }
         await product.update({ name, description, price, quantity });
 
         res.status(201).json({
