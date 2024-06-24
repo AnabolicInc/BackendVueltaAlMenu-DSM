@@ -41,7 +41,7 @@ Payment.init({
 });
 
 Payment.User = Payment.belongsTo(require('./user'), {foreignKey: 'user_id'});
-Payment.Order = Payment.belongsTo(require('./order'), {foreignKey: 'order_id'});
+Payment.Order = Payment.belongsTo(require('./orderProduct'), {foreignKey: 'orderProduct_id'});
 
 Payment.prototype.toJSON = function() {
     const payment = this.get();
