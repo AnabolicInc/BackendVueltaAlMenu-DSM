@@ -2,39 +2,50 @@ const { Model, DataTypes } = require("sequelize");
 const db = require("../db/connection");
 
 
-class OrderProduct extends Model { 
+class Order extends Model { 
     static id;
-    static order_id;
-    static product_id;
-    static quantity;
+    static user_id;
+    static status;
+    static payment_id;
+    static date;
+    static total;
 }
 
-OrderProduct.init({
-    order_id: {
+Order.init({
+    user_id: {
         type: DataTypes.INTEGER,
     },
-    product_id: {
+    status: {
+        type: DataTypes.STRING
+    },
+    payment_id: {
         type: DataTypes.INTEGER
     },
-    quantity: {
-        type: DataTypes.INTEGER
+    date: {
+        type: DataTypes.DATE
+    },
+    total: {
+        type: DataTypes.DECIMAL
     }
 }, {
     sequelize: db,
-    modelName: 'OrderProduct',
+    modelName: 'Order',
 
 });
 
-OrderProduct.Order = OrderProduct.belongsTo(require('./order'), {foreignKey: 'order_id'});
-OrderProduct.Product = OrderProduct.belongsTo(require('./product'), {foreignKey: 'product_id'});
-OrderProduct.prototype.toJSON = function() {
-    const orderProduct = this.get();
+Order.User = Order.belongsTo(require('./user'), {foreignKey: 'user_id'});
+Order.Payment = Order.belongsTo(require('./payment'), {foreignKey: 'payment_id'});
+Order.OrderProduct = Order.hasMany(require('./orderProduct'), {foreignKey: 'order_id'});
 
-    delete orderProduct.order_id;
-    delete orderProduct.product_id;
+Order.prototype.toJSON = function() {
+
+    const order = this.get();
+
+    delete order.user_id;
+    delete order.payment_id;
     
-    orderProduct.order_id = this.getDataValue('order_id');
-    orderProduct.product_id = this.getDataValue('product_id');
+    order.user_id = this.getDataValue('user_id');
+    order.payment_id = this.getDataValue('payment_id');
 
-    return orderProduct;
+    return order;
 }

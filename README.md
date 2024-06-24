@@ -36,7 +36,7 @@ Revert All Migrations:
 
 Execute Migrations:
 
-sequelize db:migrate
+`sequelize db:migrate`
 
 # Commands Seeders
 Create Seeder:
