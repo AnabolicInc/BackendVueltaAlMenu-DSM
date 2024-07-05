@@ -9,12 +9,12 @@ const router = Router();
 router.post('/createProduct/:category_id',[
     check('name', 'the field name is required').not().isEmpty(),
     check('name', 'the field name is required').isString(),
-    check('price', 'the field description is required').not().isEmpty(),
-    check('price', 'the field description is required').isNumeric(),
+    check('price', 'the field price is required').not().isEmpty(),
+    check('price', 'the field price is required').isNumeric(),
     check('description', 'the field description is required').not().isEmpty(),
     check('description', 'the field description is required').isString(),
-    check('quantity', 'the field description is required').not().isEmpty(),
-    check('quantity', 'the field description is required').isNumeric(),
+    check('quantity', 'the field quantity is required').not().isEmpty(),
+    check('quantity', 'the field quantity is required').isNumeric(),
     validateFields
 ], createProduct);
 
