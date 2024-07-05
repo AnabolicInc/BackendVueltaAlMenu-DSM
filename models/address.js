@@ -28,6 +28,6 @@ Address.init({
     modelName: 'Address',
 });
 
-Address.User = Address.belongsTo(require('./user'), {foreignKey: 'userId'});
+Address.User = Address.belongsTo(require('./user'), {foreignKey: 'user_id'});
 
 module.exports = Address;
