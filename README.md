@@ -15,8 +15,12 @@ Aquí se encuentran los comandos que se utilizarán en el backend:
 - `npm i sequelize-cli `: Instala sequelize-cli.
 - `npm install cloudinary `: Instala cloudinary.
 
-En el caso de que el sistema no deje ejecutar scripts, se debe de abrir una powershell 
-con permisos de admin e ingresar los siguientes comandos:
+
+En el caso de error de ejecutar scripts (como el siguiente ejemplo):
+
+>**File C:\....\nodemon.ps1 cannot be loaded because running scripts is disabled on this system. For more information, see about_Execution_Policies....**
+
+Se debe de abrir una powershell con permisos de administrador e ingresar los siguientes comandos:
 
 `Get-ExecutionPolicy -List`
 `Set-ExecutionPolicy RemoteSigned -Scope CurrentUser`
